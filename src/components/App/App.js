@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react';
 
-import styles from './styles.module.css'
+import { TMDBServiceProvider } from '../ServiceContext';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ErrorBoundry } from '../ErrorBoundary/ErrorBoundary';
+import { TMDBService } from '../../service/TMDBService';
+
+import styles from './styles.module.css';
+import { Header } from '../Header';
 
 const App = () => {
-    
-    return <div>App</div>
-}
+//   const [tmdbService, setTmdbService] = useState(new TMDBService());
+const tmdbService = new TMDBService()
 
-export {App}
+  return (
+    <ErrorBoundry>
+      <TMDBServiceProvider value={tmdbService}>
+        <BrowserRouter>
+          <div className={styles.container}>
+            <Header />
+            <Routes>
+              <Route path='/' element={<h1>Hello World!</h1>} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </TMDBServiceProvider>
+    </ErrorBoundry>
+  );
+};
+
+export { App };
