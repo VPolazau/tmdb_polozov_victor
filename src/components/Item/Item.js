@@ -6,7 +6,7 @@ import Rating from '@mui/material/Rating';
 import styles from './styles.module.css';
 
 const Item = ({ item }) => {
-  const { vote_average, title, release_date, poster_path } = item;
+  const { vote_average, title, release_date, poster_path, name, profile_path } = item;
 
   return (
     <div className={styles.card}>
@@ -16,24 +16,24 @@ const Item = ({ item }) => {
             <img
               loading='lazy'
               className={styles.poster}
-              src={`https://image.tmdb.org/t/p/w220_and_h330_face${poster_path}`}
-              srcSet={`https://image.tmdb.org/t/p/w220_and_h330_face${poster_path} 1x, https://image.tmdb.org/t/p/w440_and_h660_face${poster_path} 2x`}
-              alt={title}
+              src={`https://image.tmdb.org/t/p/w220_and_h330_face${poster_path || profile_path}`}
+              srcSet={`https://image.tmdb.org/t/p/w220_and_h330_face${poster_path || profile_path} 1x, https://image.tmdb.org/t/p/w440_and_h660_face${poster_path || profile_path} 2x`}
+              alt={title || name}
             />
           </a>
         </div>
       </div>
       <div className={styles.content}>
-        <Box sx={{ display: 'flex' }}>
+        {vote_average && <Box sx={{ display: 'flex' }}>
           <Rating name='size-small' value={vote_average / 2} precision={0.1} size='small' readOnly />
           <Typography variant='caption' sx={{ color: 'gray', userSelect: 'none' }}>{`\xa0${vote_average}`}</Typography>
-        </Box>
+        </Box>}
         <h2 className={styles.content_title}>
-          <a href='#flor' title={title}>
-            {title}
+          <a href='#flor' title={title || name}>
+            {title || name}
           </a>
         </h2>
-        <p className={styles.content_date}>{release_date}</p>
+        {release_date && <p className={styles.content_date}>{release_date}</p>}
       </div>
     </div>
   );
