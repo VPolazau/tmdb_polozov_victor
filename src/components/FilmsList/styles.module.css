@@ -1,0 +1,61 @@
+.films {
+  display: flex;
+  flex-direction: column;
+}
+
+.box {
+  display: flex;
+  justify-content: space-between;
+  margin: 2%;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+.page_title {
+  font-size: 3em;
+  font-weight: bold;
+  letter-spacing: 8px;
+  padding-bottom: 11px;
+}
+
+.films_filter {
+  display: flex;
+  align-items: center;
+  width: 30%;
+}
+
+.filter_span {
+  font-size: 24px;
+  margin-right: 5%;
+}
+
+.films_list_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+@media (max-width: 1040px) {
+  .films_filter {
+    width: 50%;
+  }
+}
+
+@media (max-width: 630px) {
+  .box {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .films_filter {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .films_list_container {
+    justify-content: center;
+  }
+}
