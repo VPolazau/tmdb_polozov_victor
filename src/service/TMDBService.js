@@ -5,7 +5,7 @@ export class TMDBService {
   getFilms = async (filter = 'popular', page) => {
     // filter ----- 'top_rated' || 'popular' || 'now_playing'
 
-    const res = await fetch(`${this.this._apiBase}/movie/${filter}?api_key=${this._apiKey}&page=${page}`);
+    const res = await fetch(`${this._apiBase}/movie/${filter}?api_key=${this._apiKey}&page=${page}`);
 
     if (!res.ok) {
       throw new Error(`Could not fetch movie/page-${page}, received ${res.status}`);
