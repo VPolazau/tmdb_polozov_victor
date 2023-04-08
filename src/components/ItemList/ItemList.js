@@ -3,31 +3,29 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 import { ToggleBtns } from '../ToogleBtns';
-import { TMDBService } from '../../service/TMDBService';
+import { Item } from '../Item';
+import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
-import { Item } from '../Item';
 
-const ItemList = () => {
+const ItemList = ({ tmdbService }) => {
   const [mas, setMas] = useState();
-
-  const tmdbService = new TMDBService();
 
   useEffect(() => {
     // tmdbService.getFilms('top_rated', 1).then((res) => setMas(res.results));
     tmdbService.getPeople(1).then((res) => setMas(res.results));
-  }, []);
+  }, [tmdbService]);
 
   const [page, setPage] = useState(1);
   const handleChangePagination = (event, value) => setPage(value);
-
-  console.log(mas)
-
+  
   return (
     <>
       <div className={styles.films}>
         <div className={styles.box}>
-          <span className={styles.page_title}>{mas && mas[0].title ? 'Films' : 'People'}</span>
+          <span className={styles.page_title}>
+            {mas && mas[0].title ? 'Films' : (mas && mas[0].name ? 'People' : null)}
+          </span>
           {mas && mas[0].title && (
             <div className={styles.films_filter}>
               <span className={styles.filter_span}>Filter by: </span>
@@ -55,4 +53,6 @@ const ItemList = () => {
   );
 };
 
-export { ItemList };
+const wrapped = withTMDBService()(ItemList);
+
+export { wrapped as ItemList };
