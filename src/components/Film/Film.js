@@ -2,7 +2,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
-import StarIcon from '@mui/icons-material/Star';
 
 import styles from './styles.module.css';
 
