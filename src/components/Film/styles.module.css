@@ -13,7 +13,6 @@
     rgba(52.5, 52.5, 73.5, 0.84) 50%,
     rgba(52.5, 52.5, 73.5, 0.84) 100%
   );
-  box-shadow: 0px 5px 15px black, 0px -3px 15px black;
 }
 
 .poster_wrapper {

@@ -60,7 +60,7 @@ const Film = ({id, tmdbService}) => {
             <span className={styles.tag}>{` (${release_date.slice(0, 4)})`}</span>
           </h2>
           <div className={styles.facts}>
-            <span className={styles.release}>{release_date.split('-').join('/')}</span>
+            <span className={styles.release}>{release_date.split('-').reverse().join('/')}</span>
             <span>{'\xa0 • \xa0'}</span>
             <span className={styles.genres}>{infoView(genres)}</span>
             <span>{'\xa0 • \xa0'}</span>
@@ -82,8 +82,8 @@ const Film = ({id, tmdbService}) => {
             >{`\xa0${vote_average}`}</Typography>
           </Box>
           <div className={styles.info_body}>
-            <h3 className={styles.auto}>Overview</h3>
-            <div className={styles.overview}>
+            <h3>Overview</h3>
+            <div>
               <p>{overview}</p>
             </div>
           </div>
