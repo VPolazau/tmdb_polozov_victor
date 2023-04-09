@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
+import { withTMDBService } from '../hocHelpers/withTMDBService'
+
 import styles from './styles.module.css';
 
-const Film = ({ item }) => {
+const Film = ({id, tmdbService}) => {
+  const [item, setItem] = useState()
+
+  useEffect(() => {
+    tmdbService.getMovie(id).then(res => setItem(res))
+  }, [id, tmdbService])
+
+  if(!item) return 
+
   const {
     title,
     vote_average,
@@ -19,8 +29,8 @@ const Film = ({ item }) => {
     status,
   } = item;
 
-  const infoView = (type) =>{
-    return type.map((i, idx) => {
+  const infoView = (mas) =>{
+    return mas.map((i, idx) => {
       if (!idx) return <span key={i?.id || idx}>{i.name}</span>;
       return <span key={i?.id || idx}>, {i.name}</span>;
     });}
@@ -83,4 +93,6 @@ const Film = ({ item }) => {
   );
 };
 
-export { Film };
+const wrapped = withTMDBService()(Film)
+
+export { wrapped as Film };

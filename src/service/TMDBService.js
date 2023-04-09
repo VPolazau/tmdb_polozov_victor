@@ -1,5 +1,5 @@
 export class TMDBService {
-  _apiBase = 'https://api.themoviedb.org/3/';
+  _apiBase = 'https://api.themoviedb.org/3';
   _apiKey = '2876da9e43430f1d4469f38a5a4e8f4c';
 
   getFilms = async (filter = 'popular', page) => {
