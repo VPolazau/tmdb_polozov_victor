@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Header } from '../Header';
-// import { ItemList } from '../ItemList';
-import { Film } from '../Film'
-// import { Person } from '../Person'
+import { PageRoutes } from '../PageRoutes';
+
 
 
 const App = () => {
@@ -11,9 +10,7 @@ const App = () => {
   return (
     <>
       <Header />
-      {/* {<Person id={224513}/>} */}
-      {<Film id={76600}/>}
-      {/* <ItemList /> */}
+      <PageRoutes />
     </>
   );
 };
