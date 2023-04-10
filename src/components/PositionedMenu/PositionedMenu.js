@@ -23,6 +23,7 @@ const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter }
       tmdbService.getPeople(1).then((data) => {
         updateType('People')
         updateListObj(data);
+        updateFilter('')
       });
     }
     if (e.target.innerText === 'Films') {
