@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 import { ToggleBtns } from '../ToogleBtns';
 import { Item } from '../Item';
+import { Void } from '../Void';
 
 import styles from './styles.module.css';
 
 const ItemList = ({ filter, page, listObj }) => {
   const [response, setResponse] = useState(listObj);
   const [pageNum, setPageNum] = useState(page);
+  const [filterFilms, setfilterFilms] = useState(filter)
+
+  const state = useSelector(state => state)
+  console.log(state)
 
   useEffect(() => {
-    // if (filter === 'people') {
-    //   tmdbService.getPeople(page).then((res) => setResponse(res));
-    // } else {
-    //   tmdbService.getFilms(filter, page).then((res) => setResponse(res));
-    // }
+    setfilterFilms(filter)
     setResponse(listObj)
     setPageNum(page)
   }, [page, filter, listObj]);
@@ -26,9 +27,9 @@ const ItemList = ({ filter, page, listObj }) => {
   
   const handleChangePagination = (event, value) => setPageNum(value);
 
-  if (!response) return;
-
   const { results, total_pages } = response;
+
+  if (!results) return
   return (
     <>
       <div className={styles.films}>
@@ -37,7 +38,7 @@ const ItemList = ({ filter, page, listObj }) => {
           {results[0].title && (
             <div className={styles.films_filter}>
               <span className={styles.filter_span}>Filter by: </span>
-              <ToggleBtns filter={filter}/>
+              <ToggleBtns filter={filterFilms}/>
             </div>
           )}
         </div>
