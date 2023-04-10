@@ -9,7 +9,7 @@ import { Void } from '../Void';
 const PageRoutes = () => {
   return (
     <Routes>
-      <Route path='/' element={<Void />} />
+      <Route path='/' element={<ItemList />} />
       <Route path={`/films/`} element={<ItemList filter='popular' page={1}/>} />
       <Route path={`/people/`} element={<ItemList filter='people' page={1}/>} />
     </Routes>
