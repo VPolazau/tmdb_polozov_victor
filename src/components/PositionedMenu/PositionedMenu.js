@@ -7,9 +7,9 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { withTMDBService } from '../hocHelpers/withTMDBService';
-import { upadatelistObj, updateFilter, updateType, updatePage } from '../../actions';
+import { updateListObj, updateFilter, updateType } from '../../actions';
 
-const PositionedMenu = ({ tmdbService, upadatelistObj, updateType, updatePage, updateFilter }) => {
+const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -22,16 +22,14 @@ const PositionedMenu = ({ tmdbService, upadatelistObj, updateType, updatePage, u
     if (e.target.innerText === 'People') {
       tmdbService.getPeople(1).then((data) => {
         updateType('People')
-        upadatelistObj(data);
-        updatePage(1)
+        updateListObj(data);
       });
     }
     if (e.target.innerText === 'Films') {
       tmdbService.getFilms('popular', 1).then((data) => {
         updateType('Films')
-        upadatelistObj(data);
+        updateListObj(data);
         updateFilter('popular')
-        updatePage(1)
       });
     }
   };
@@ -69,8 +67,8 @@ const PositionedMenu = ({ tmdbService, upadatelistObj, updateType, updatePage, u
   );
 };
 
-const mapDispatchToProps = { upadatelistObj, updateType, updateFilter, updatePage };
+const mapDispatchToProps = { updateListObj, updateType, updateFilter };
 
-const wrapped = withTMDBService()(connect(null ,mapDispatchToProps)(PositionedMenu));
+const wrapped = withTMDBService()(connect(null, mapDispatchToProps)(PositionedMenu));
 
 export { wrapped as PositionedMenu };

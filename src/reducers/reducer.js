@@ -2,7 +2,6 @@ const initialState = {
   type: '',
   filter: '',
   listObj: {},
-  page: 1,
   item: {},
   searchText: '',
 };
@@ -23,11 +22,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         filter: action.payload,
-      };
-    case 'UPDATE_PAGE':
-      return {
-        ...state,
-        page: action.payload,
       };
     default:
       return state;

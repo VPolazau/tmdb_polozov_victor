@@ -5,9 +5,9 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { withTMDBService } from '../hocHelpers/withTMDBService';
-import { upadatelistObj, updateFilter, updatePage } from '../../actions';
+import { updateListObj, updateFilter } from '../../actions';
 
-const ToggleBtns = ({ filter, tmdbService, upadatelistObj, updateFilter, updatePage }) => {
+const ToggleBtns = ({ filter, tmdbService, updateListObj, updateFilter }) => {
   const [alignment, setAlignment] = useState(filter);
 
   useEffect(() => {
@@ -18,9 +18,9 @@ const ToggleBtns = ({ filter, tmdbService, upadatelistObj, updateFilter, updateP
     setAlignment(newAlignment);
 
     tmdbService.getFilms(newAlignment, 1).then((data) => {
-      upadatelistObj(data)
+      updateListObj(data)
       updateFilter(newAlignment)
-      updatePage(1);
+
     });
   };
 
@@ -40,7 +40,7 @@ const ToggleBtns = ({ filter, tmdbService, upadatelistObj, updateFilter, updateP
   );
 };
 
-const mapDispatchToProps = { upadatelistObj, updateFilter, updatePage };
+const mapDispatchToProps = { updateListObj, updateFilter };
 
 const wrapped = withTMDBService()(connect(null, mapDispatchToProps)(ToggleBtns));
 

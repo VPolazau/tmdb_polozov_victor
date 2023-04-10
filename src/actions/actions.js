@@ -1,4 +1,4 @@
-const upadatelistObj = (newListObj) => {
+const updateListObj = (newListObj) => {
   return {
     type: 'UPDATE_LISTOBJ',
     payload: newListObj,
@@ -12,13 +12,6 @@ const updateFilter = (newFilter) => {
   };
 };
 
-const updatePage = (newPage) => {
-  return { 
-    type: 'UPDATE_PAGE', 
-    payload: newPage 
-  };
-};
-
 const updateType = (newType) => {
   return { 
     type: 'UPDATE_TYPE', 
@@ -27,4 +20,4 @@ const updateType = (newType) => {
 };
 
 
-export { upadatelistObj, updateFilter, updatePage, updateType };
+export { updateListObj, updateFilter, updateType };
