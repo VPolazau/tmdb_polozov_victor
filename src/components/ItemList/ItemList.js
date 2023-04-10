@@ -8,47 +8,52 @@ import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
 
-const ItemList = ({ tmdbService }) => {
-  const [mas, setMas] = useState();
+const ItemList = ({ filter, page, tmdbService }) => {
+  const [response, setResponse] = useState();
 
   useEffect(() => {
-    // tmdbService.getFilms('top_rated', 1).then((res) => setMas(res.results));
-    tmdbService.getPeople(1).then((res) => setMas(res.results));
-  }, [tmdbService]);
+    if (filter === 'people') {
+      tmdbService.getPeople(page).then((res) => setResponse(res));
+    } else {
+      tmdbService.getFilms(filter, page).then((res) => setResponse(res));
+    }
+    setPageNum(page)
+  }, [tmdbService, page, filter]);
 
-  const [page, setPage] = useState(1);
-  const handleChangePagination = (event, value) => setPage(value);
-  
+  const [pageNum, setPageNum] = useState(page);
+  const handleChangePagination = (event, value) => setPageNum(value);
+
+  if (!response) return;
+
+  const { results, total_pages } = response;
   return (
     <>
       <div className={styles.films}>
         <div className={styles.box}>
-          <span className={styles.page_title}>
-            {mas && mas[0].title ? 'Films' : (mas && mas[0].name ? 'People' : null)}
-          </span>
-          {mas && mas[0].title && (
+          <span className={styles.page_title}>{results[0].title ? 'Films' : 'People'}</span>
+          {results[0].title && (
             <div className={styles.films_filter}>
               <span className={styles.filter_span}>Filter by: </span>
-              <ToggleBtns />
+              <ToggleBtns filter={filter}/>
             </div>
           )}
         </div>
         <div className={styles.films_list_container}>
-          {mas && mas.map((item) => <Item key={item.id} item={item} />)}
+          {results.map((item) => (
+            <Item key={item.id} item={item} />
+          ))}
         </div>
       </div>
-      {mas && (
-        <Stack sx={{ mt: 5, mb: 10 }}>
-          <Pagination
-            count={1000}
-            siblingCount={1}
-            page={page}
-            size='small'
-            onChange={handleChangePagination}
-            sx={{ marginLeft: 'auto', marginRight: '5%' }}
-          />
-        </Stack>
-      )}
+      <Stack sx={{ mt: 5, mb: 10 }}>
+        <Pagination
+          count={total_pages < 500 ? total_pages : 500}
+          siblingCount={1}
+          page={pageNum}
+          size='small'
+          onChange={handleChangePagination}
+          sx={{ marginLeft: 'auto', marginRight: '5%' }}
+        />
+      </Stack>
     </>
   );
 };

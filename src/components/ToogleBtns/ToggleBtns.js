@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-const ToggleBtns = () => {
-  const [alignment, setAlignment] = useState('popular');
+const ToggleBtns = ({filter}) => {
+  const [alignment, setAlignment] = useState(filter);
 
+  useEffect(() => {
+    setAlignment(filter)
+  }, [filter])
+  
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
