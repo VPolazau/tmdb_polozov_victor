@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux'
+
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 import { ToggleBtns } from '../ToogleBtns';
 import { Item } from '../Item';
-import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
 
-const ItemList = ({ filter, page, tmdbService }) => {
-  const [response, setResponse] = useState();
+const ItemList = ({ filter, page, listObj }) => {
+  const [response, setResponse] = useState(listObj);
+  const [pageNum, setPageNum] = useState(page);
 
   useEffect(() => {
-    if (filter === 'people') {
-      tmdbService.getPeople(page).then((res) => setResponse(res));
-    } else {
-      tmdbService.getFilms(filter, page).then((res) => setResponse(res));
-    }
+    // if (filter === 'people') {
+    //   tmdbService.getPeople(page).then((res) => setResponse(res));
+    // } else {
+    //   tmdbService.getFilms(filter, page).then((res) => setResponse(res));
+    // }
+    setResponse(listObj)
     setPageNum(page)
-  }, [tmdbService, page, filter]);
+  }, [page, filter, listObj]);
 
-  const [pageNum, setPageNum] = useState(page);
+  
   const handleChangePagination = (event, value) => setPageNum(value);
 
   if (!response) return;
@@ -58,6 +61,8 @@ const ItemList = ({ filter, page, tmdbService }) => {
   );
 };
 
-const wrapped = withTMDBService()(ItemList);
+const mapStateToProps = ({ listObj, page, filter }) => ({ listObj, page, filter })
+
+const wrapped = connect(mapStateToProps)(ItemList);
 
 export { wrapped as ItemList };

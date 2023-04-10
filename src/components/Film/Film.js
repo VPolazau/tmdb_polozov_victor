@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux'
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
-import { withTMDBService } from '../hocHelpers/withTMDBService'
-
 import styles from './styles.module.css';
 
-const Film = ({id, tmdbService}) => {
-  const [item, setItem] = useState()
+const Film = ({ item }) => {
+  const [itemFilm, setItemFilm] = useState(item)
 
   useEffect(() => {
-    tmdbService.getMovie(id).then(res => setItem(res))
-  }, [id, tmdbService])
+    setItemFilm(item)
+  }, [item])
 
-  if(!item) return 
+  if(!itemFilm) return 
 
   const {
     title,
@@ -27,7 +27,7 @@ const Film = ({id, tmdbService}) => {
     backdrop_path,
     production_countries,
     status,
-  } = item;
+  } = itemFilm;
 
   const infoView = (mas) =>{
     return mas.map((i, idx) => {
@@ -93,6 +93,8 @@ const Film = ({id, tmdbService}) => {
   );
 };
 
-const wrapped = withTMDBService()(Film)
+const mapStateToProps = ({ item }) => ({ item })
+
+const wrapped = connect(mapStateToProps)(Film)
 
 export { wrapped as Film };

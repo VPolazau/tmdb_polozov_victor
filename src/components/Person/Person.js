@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-
-import { withTMDBService } from '../hocHelpers/withTMDBService';
+import { connect } from 'react-redux';
 
 import styles from './styles.module.css';
 
-const Person = ({ id, tmdbService }) => {
-  const [item, setItem] = useState();
+const Person = ({ item }) => {
+  const [itemPerson, setItemPerson] = useState(item);
 
   useEffect(() => {
-    tmdbService.getPerson(id).then((res) => setItem(res));
-  }, [id, tmdbService]);
+    setItemPerson(item)
+  }, [item]);
 
-  if (!item) return;
+  if (!itemPerson) return;
 
   const {
     name,
@@ -23,7 +22,7 @@ const Person = ({ id, tmdbService }) => {
     place_of_birth,
     also_known_as,
     gender,
-  } = item;
+  } = itemPerson;
 
   return (
     <div className={styles.person_container}>
@@ -83,6 +82,8 @@ const Person = ({ id, tmdbService }) => {
   );
 };
 
-const wrapped = withTMDBService()(Person);
+const mapStateToProps = ({ item }) => ({ item })
+
+const wrapped = connect(mapStateToProps)(Person);
 
 export { wrapped as Person };
