@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         type: action.payload,
       };
-    case 'UPDATE_LISTOBJ':
+    case 'UPDATE_LIST_OBJ':
       return {
         ...state,
         listObj: action.payload,
@@ -22,6 +22,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         filter: action.payload,
+      };
+    case 'UPDATE_SEARCH_TEXT':
+      return {
+        ...state,
+        searchText: action.payload,
       };
     default:
       return state;

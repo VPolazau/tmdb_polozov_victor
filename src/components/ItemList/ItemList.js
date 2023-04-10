@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, useSelector } from 'react-redux'
+import { connect, useSelector } from 'react-redux';
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -11,49 +11,54 @@ import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
 
-
-const ItemList = ({ filter, listObj, type, updateListObj, tmdbService }) => {
+const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbService }) => {
   const [response, setResponse] = useState(listObj);
   const [pageNum, setPageNum] = useState(1);
-  const [filterFilms, setfilterFilms] = useState(filter)
+  const [filterFilms, setfilterFilms] = useState(filter);
 
   const { results, page, total_pages } = response;
 
-  const state = useSelector(state => state)
-  console.log(state)
-
   useEffect(() => {
-    setfilterFilms(filter)
-    setResponse(listObj)
-    if(page) setPageNum(page)
+    setfilterFilms(filter);
+    setResponse(listObj);
+    if (page) setPageNum(page);
   }, [page, filter, listObj]);
 
-  
   const handleChangePagination = (event, value) => {
-    if(type === 'Films') {
-      tmdbService.getFilms(filterFilms, value).then(data => {
-        updateListObj(data)
-      })
+    if (type === 'Films' && searchText.length > 0) {
+      tmdbService.searchItem('movie', searchText, value).then((data) => {
+        updateListObj(data);
+      });
     }
-    if (type === 'People'){
-      tmdbService.getPeople(value).then(data => {
-        updateListObj(data)
-      })
+    if (type === 'People' && searchText.length > 0) {
+      tmdbService.searchItem('person', searchText, value).then((data) => {
+        updateListObj(data);
+      });
+    }
+    if (type === 'Films' && searchText.length === 0) {
+      tmdbService.getFilms(filterFilms, value).then((data) => {
+        updateListObj(data);
+      });
+    }
+    if (type === 'People' && searchText.length === 0) {
+      tmdbService.getPeople(value).then((data) => {
+        updateListObj(data);
+      });
     }
     setPageNum(value);
-  }
+  };
 
-  if (!results) return
+  if (!results) return;
 
   return (
     <>
       <div className={styles.films}>
         <div className={styles.box}>
-          <span className={styles.page_title}>{results[0].title ? 'Films' : 'People'}</span>
-          {results[0].title && (
+          <span className={styles.page_title}>{results[0]?.title ? 'Films' : results[0]?.name ? 'People' : null}</span>
+          {filter && (
             <div className={styles.films_filter}>
               <span className={styles.filter_span}>Filter by: </span>
-              <ToggleBtns filter={filterFilms}/>
+              <ToggleBtns filter={filterFilms} />
             </div>
           )}
         </div>
@@ -77,7 +82,7 @@ const ItemList = ({ filter, listObj, type, updateListObj, tmdbService }) => {
   );
 };
 
-const mapStateToProps = ({ listObj, page, filter, type }) => ({ listObj, page, filter, type })
+const mapStateToProps = ({ listObj, page, filter, type, searchText }) => ({ listObj, page, filter, type, searchText });
 
 const mapDispatchToProps = { updateListObj };
 

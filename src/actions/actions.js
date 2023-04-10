@@ -1,6 +1,6 @@
 const updateListObj = (newListObj) => {
   return {
-    type: 'UPDATE_LISTOBJ',
+    type: 'UPDATE_LIST_OBJ',
     payload: newListObj,
   };
 };
@@ -19,5 +19,11 @@ const updateType = (newType) => {
   };
 };
 
+const updateSearchText = (text) => {
+  return { 
+    type: 'UPDATE_SEARCH_TEXT', 
+    payload: text 
+  };
+};
 
-export { updateListObj, updateFilter, updateType };
+export { updateListObj, updateFilter, updateType, updateSearchText };

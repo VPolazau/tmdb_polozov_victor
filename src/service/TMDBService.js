@@ -43,4 +43,15 @@ export class TMDBService {
 
     return await res.json();
   };
+
+  searchItem = async (type, searchText, page = 1) => {
+    // movie || person
+    const res = await fetch(`${this._apiBase}/search/${type}?api_key=${this._apiKey}&language=en-US&query=${searchText}&page=${page}`);
+
+    if (!res.ok) {
+      throw new Error(`Could not fetch search/${type}/${searchText}, received ${res.status}`);
+    }
+
+    return await res.json();
+  }
 }
