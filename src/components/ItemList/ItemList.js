@@ -6,14 +6,18 @@ import Stack from '@mui/material/Stack';
 
 import { ToggleBtns } from '../ToogleBtns';
 import { Item } from '../Item';
-import { Void } from '../Void';
+import { updateListObj } from '../../actions';
+import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
 
-const ItemList = ({ filter, page, listObj }) => {
+
+const ItemList = ({ filter, listObj, type, updateListObj, tmdbService }) => {
   const [response, setResponse] = useState(listObj);
-  const [pageNum, setPageNum] = useState(page);
+  const [pageNum, setPageNum] = useState(1);
   const [filterFilms, setfilterFilms] = useState(filter)
+
+  const { results, page, total_pages } = response;
 
   const state = useSelector(state => state)
   console.log(state)
@@ -21,15 +25,26 @@ const ItemList = ({ filter, page, listObj }) => {
   useEffect(() => {
     setfilterFilms(filter)
     setResponse(listObj)
-    setPageNum(page)
+    if(page) setPageNum(page)
   }, [page, filter, listObj]);
 
   
-  const handleChangePagination = (event, value) => setPageNum(value);
-
-  const { results, total_pages } = response;
+  const handleChangePagination = (event, value) => {
+    if(type === 'Films') {
+      tmdbService.getFilms(filterFilms, value).then(data => {
+        updateListObj(data)
+      })
+    }
+    if (type === 'People'){
+      tmdbService.getPeople(value).then(data => {
+        updateListObj(data)
+      })
+    }
+    setPageNum(value);
+  }
 
   if (!results) return
+
   return (
     <>
       <div className={styles.films}>
@@ -62,8 +77,10 @@ const ItemList = ({ filter, page, listObj }) => {
   );
 };
 
-const mapStateToProps = ({ listObj, page, filter }) => ({ listObj, page, filter })
+const mapStateToProps = ({ listObj, page, filter, type }) => ({ listObj, page, filter, type })
 
-const wrapped = connect(mapStateToProps)(ItemList);
+const mapDispatchToProps = { updateListObj };
+
+const wrapped = withTMDBService()(connect(mapStateToProps, mapDispatchToProps)(ItemList));
 
 export { wrapped as ItemList };
