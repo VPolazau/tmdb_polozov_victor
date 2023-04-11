@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
 
-const Person = ({ item }) => {
-  const [itemPerson, setItemPerson] = useState(item);
+const Person = ({ tmdbService }) => {
+  const [itemPerson, setItemPerson] = useState();
+  const params = useParams()
 
   useEffect(() => {
-    setItemPerson(item)
-  }, [item]);
+    tmdbService.getPerson(params.id).then(data => {
+      setItemPerson(data)
+    })
+  }, [tmdbService, params]);
 
   if (!itemPerson) return;
 
@@ -82,8 +87,6 @@ const Person = ({ item }) => {
   );
 };
 
-const mapStateToProps = ({ item }) => ({ item })
-
-const wrapped = connect(mapStateToProps)(Person);
+const wrapped = withTMDBService()(Person);
 
 export { wrapped as Person };
