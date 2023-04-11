@@ -1,6 +1,6 @@
 const initialState = {
-  type: '',
-  filter: '',
+  type: 'films',
+  filter: 'popular',
   listObj: {},
   item: {},
   searchText: '',

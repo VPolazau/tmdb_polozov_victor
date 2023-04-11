@@ -7,8 +7,9 @@ import styles from './styles.module.css';
 import no_image from './no_image.svg';
 
 const Item = ({ item }) => {
-  const { vote_average, title, release_date, poster_path, name, profile_path } = item;
+  let { vote_average, title, release_date, poster_path, name, profile_path } = item;
 
+  if(vote_average === 0) vote_average = undefined
   return (
     <div className={styles.card}>
       <div className={styles.image}>
@@ -35,7 +36,7 @@ const Item = ({ item }) => {
         </div>
       </div>
       <div className={styles.content}>
-        {(vote_average || vote_average !== 0) && (
+        {vote_average && (
           <Box sx={{ display: 'flex' }}>
             <Rating name='size-small' value={vote_average / 2} precision={0.1} size='small' readOnly />
             <Typography

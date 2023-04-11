@@ -18,30 +18,28 @@ const Header = ({ type, tmdbService, updateListObj, updateFilter, updateSearchTe
   const debouncedText = useDebounce(text, 500)
 
   useEffect(() => {
-    if (type === 'Films' && !debouncedText) {
+    if (type === 'films' && !debouncedText) {
       tmdbService.getFilms('popular', 1).then((data) => {
         updateListObj(data);
         updateFilter('popular');
       });
       return;
     }
-    if (type === 'People' && !debouncedText) {
+    if (type === 'people' && !debouncedText) {
       tmdbService.getPeople(1).then((data) => {
         updateListObj(data);
       });
       return;
     }
-    if (type === 'Films') {
+    if (type === 'films') {
       tmdbService.searchItem('movie', debouncedText).then((data) => {
         updateListObj(data);
-        updateFilter('');
         updateSearchText(debouncedText);
       });
     }
-    if (type === 'People') {
+    if (type === 'people') {
       tmdbService.searchItem('person', debouncedText).then((data) => {
         updateListObj(data);
-        updateFilter('');
         updateSearchText(debouncedText);
       });
     }
