@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -13,39 +14,46 @@ import styles from './styles.module.css';
 
 const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbService }) => {
   const [response, setResponse] = useState(listObj);
-  const [pageNum, setPageNum] = useState(1);
   const [filterFilms, setfilterFilms] = useState(filter);
+  const navigate = useNavigate();
 
-  const { results, page, total_pages } = response;
+  const param = useParams();
+  const pageNum = +param.page;
+
+  const { results, total_pages } = response;
 
   useEffect(() => {
-    setfilterFilms(filter);
     setResponse(listObj);
-    if (page) setPageNum(page);
-  }, [page, filter, listObj]);
+  }, [listObj]);
+
+  useEffect(() => {
+    if (type === 'films' && searchText.length > 0) {
+      tmdbService.searchItem('movie', searchText, pageNum).then((data) => {
+        updateListObj(data);
+      });
+    }
+    if (type === 'people' && searchText.length > 0) {
+      tmdbService.searchItem('person', searchText, pageNum).then((data) => {
+        updateListObj(data);
+      });
+    }
+    if (type === 'films' && searchText === '') {
+      tmdbService.getFilms(filter, pageNum).then((data) => {
+        updateListObj(data);
+      });
+    }
+    if (type === 'people' && searchText === '') {
+      tmdbService.getPeople(pageNum).then((data) => {
+        updateListObj(data);
+      });
+    }
+
+    setfilterFilms(filter);
+  }, [filter, pageNum, searchText, type]);
 
   const handleChangePagination = (event, value) => {
-    if (type === 'Films' && searchText.length > 0) {
-      tmdbService.searchItem('movie', searchText, value).then((data) => {
-        updateListObj(data);
-      });
-    }
-    if (type === 'People' && searchText.length > 0) {
-      tmdbService.searchItem('person', searchText, value).then((data) => {
-        updateListObj(data);
-      });
-    }
-    if (type === 'Films' && searchText.length === 0) {
-      tmdbService.getFilms(filterFilms, value).then((data) => {
-        updateListObj(data);
-      });
-    }
-    if (type === 'People' && searchText.length === 0) {
-      tmdbService.getPeople(value).then((data) => {
-        updateListObj(data);
-      });
-    }
-    setPageNum(value);
+    window.scrollTo(0, 0);
+    navigate(`/${type}/page/${value}`);
   };
 
   if (!results) return;
@@ -54,8 +62,8 @@ const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbServic
     <>
       <div className={styles.films}>
         <div className={styles.box}>
-          <span className={styles.page_title}>{results[0]?.title ? 'Films' : results[0]?.name ? 'People' : null}</span>
-          {filter && (
+          <span className={styles.page_title}>{(param?.films || param?.people) === 'films' ? 'Films' : 'People'}</span>
+          {type === 'films' && (
             <div className={styles.films_filter}>
               <span className={styles.filter_span}>Filter by: </span>
               <ToggleBtns filter={filterFilms} />
@@ -72,7 +80,7 @@ const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbServic
         <Pagination
           count={total_pages < 500 ? total_pages : 500}
           siblingCount={1}
-          page={pageNum}
+          page={+pageNum}
           size='small'
           onChange={handleChangePagination}
           sx={{ marginLeft: 'auto', marginRight: '5%' }}

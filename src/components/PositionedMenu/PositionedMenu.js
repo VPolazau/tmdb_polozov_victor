@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -7,9 +8,10 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { withTMDBService } from '../hocHelpers/withTMDBService';
-import { updateListObj, updateFilter, updateType } from '../../actions';
+import { updateListObj, updateFilter, updateType, updateSearchText } from '../../actions';
 
-const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter }) => {
+const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter, updateSearchText }) => {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -19,18 +21,21 @@ const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter }
 
   const handleClose = (e) => {
     setAnchorEl(null);
+    updateSearchText('')
+    document.querySelector('#outlined-basic').value = null
     if (e.target.innerText === 'People') {
       tmdbService.getPeople(1).then((data) => {
-        updateType('People')
+        updateType('people')
         updateListObj(data);
-        updateFilter('')
+        navigate(`/people/page/1`)
       });
     }
     if (e.target.innerText === 'Films') {
       tmdbService.getFilms('popular', 1).then((data) => {
-        updateType('Films')
+        updateType('films')
         updateListObj(data);
         updateFilter('popular')
+        navigate(`/films/page/1`)
       });
     }
   };
@@ -68,7 +73,7 @@ const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter }
   );
 };
 
-const mapDispatchToProps = { updateListObj, updateType, updateFilter };
+const mapDispatchToProps = { updateListObj, updateType, updateFilter, updateSearchText };
 
 const wrapped = withTMDBService()(connect(null, mapDispatchToProps)(PositionedMenu));
 

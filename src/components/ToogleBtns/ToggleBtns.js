@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-import { withTMDBService } from '../hocHelpers/withTMDBService';
-import { updateListObj, updateFilter } from '../../actions';
+import { updateFilter } from '../../actions';
+import { useNavigate } from 'react-router-dom';
 
-const ToggleBtns = ({ filter, tmdbService, updateListObj, updateFilter }) => {
+const ToggleBtns = ({ filter, updateFilter }) => {
   const [alignment, setAlignment] = useState(filter);
+  const navigate = useNavigate()
 
   useEffect(() => {
     setAlignment(filter);
@@ -16,12 +17,8 @@ const ToggleBtns = ({ filter, tmdbService, updateListObj, updateFilter }) => {
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
-
-    tmdbService.getFilms(newAlignment, 1).then((data) => {
-      updateListObj(data)
-      updateFilter(newAlignment)
-
-    });
+    updateFilter(newAlignment)
+    navigate(`/films/page/1`)
   };
 
   return (
@@ -40,8 +37,8 @@ const ToggleBtns = ({ filter, tmdbService, updateListObj, updateFilter }) => {
   );
 };
 
-const mapDispatchToProps = { updateListObj, updateFilter };
+const mapDispatchToProps = { updateFilter };
 
-const wrapped = withTMDBService()(connect(null, mapDispatchToProps)(ToggleBtns));
+const wrapped = connect(null, mapDispatchToProps)(ToggleBtns);
 
 export { wrapped as ToggleBtns };
