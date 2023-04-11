@@ -6,13 +6,18 @@ import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
 import styles from './styles.module.css';
+import { withTMDBService } from '../hocHelpers/withTMDBService';
+import { useParams } from 'react-router-dom';
 
-const Film = ({ item }) => {
-  const [itemFilm, setItemFilm] = useState(item)
+const Film = ({ tmdbService }) => {
+  const [itemFilm, setItemFilm] = useState()
+  const params = useParams()
 
   useEffect(() => {
-    setItemFilm(item)
-  }, [item])
+    tmdbService.getMovie(params.id).then(data => {
+      setItemFilm(data)
+    })
+  }, [tmdbService, params])
 
   if(!itemFilm) return 
 
@@ -93,8 +98,6 @@ const Film = ({ item }) => {
   );
 };
 
-const mapStateToProps = ({ item }) => ({ item })
-
-const wrapped = connect(mapStateToProps)(Film)
+const wrapped = withTMDBService()(Film)
 
 export { wrapped as Film };
