@@ -11,35 +11,37 @@ import { withTMDBService } from '../hocHelpers/withTMDBService';
 import { updateListObj, updateFilter, updateType, updateSearchText } from '../../actions';
 
 const PositionedMenu = ({ tmdbService, updateType, updateFilter, updateSearchText }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const searchText = useSelector(state => state.searchText)
+  const searchText = useSelector((state) => state.searchText);
 
   const handleClick = (event) => {
-    updateSearchText('')
-    document.querySelector('#outlined-basic').value = null
+    updateSearchText('');
+    document.querySelector('#outlined-basic').value = null;
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (e) => {
-    setAnchorEl(null);
-    updateSearchText('')
-    document.querySelector('#outlined-basic').value = null
-    if (e.target.innerText === 'People') {
+    if (e.target.textContent === 'People') {
       tmdbService.getPeople(1).then((data) => {
-        updateType('people')
-        navigate(`/people/page/1`)
+        updateType('people');
+        updateListObj(data);
+        navigate(`/people/page/1`);
       });
     }
-    if (e.target.innerText === 'Films') {
+    if (e.target.textContent === 'Films') {
       tmdbService.getFilms('popular', 1).then((data) => {
-        updateType('films')
-        updateFilter('popular')
-        navigate(`/`)
+        updateListObj(data);
+        updateType('films');
+        updateFilter('popular');
+        navigate(`/`);
       });
     }
+    setAnchorEl(null);
+    updateSearchText('');
+    document.querySelector('#outlined-basic').value = null;
   };
 
   return (
@@ -68,8 +70,12 @@ const PositionedMenu = ({ tmdbService, updateType, updateFilter, updateSearchTex
           horizontal: 'left',
         }}
       >
-        <MenuItem onClick={handleClose} disabled={searchText.length > 0}>Films</MenuItem>
-        <MenuItem onClick={handleClose} disabled={searchText.length > 0}>People</MenuItem>
+        <MenuItem onClick={handleClose} disabled={searchText.length > 0}>
+          Films
+        </MenuItem>
+        <MenuItem onClick={handleClose} disabled={searchText.length > 0}>
+          People
+        </MenuItem>
       </Menu>
     </div>
   );
