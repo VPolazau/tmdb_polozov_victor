@@ -6,18 +6,26 @@ import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
 import { withTMDBService } from '../hocHelpers/withTMDBService';
+import { Spinner } from '../Spinner';
 
 import styles from './styles.module.css';
 
+
 const Film = ({ tmdbService }) => {
   const [itemFilm, setItemFilm] = useState()
+  const [loading, setLoading] = useState(true)
   const params = useParams()
 
   useEffect(() => {
     tmdbService.getMovie(params.id).then(data => {
-      setItemFilm(data)
+      setTimeout(() => {
+        setItemFilm(data)
+        setLoading(false)
+      }, 400)
     })
   }, [tmdbService, params])
+
+  if(loading) return <Spinner />
 
   if(!itemFilm) return 
 
@@ -39,6 +47,8 @@ const Film = ({ tmdbService }) => {
       if (!idx) return <span key={i?.id || idx}>{i.name}</span>;
       return <span key={i?.id || idx}>, {i.name}</span>;
     });}
+
+  
 
   return (
     <div

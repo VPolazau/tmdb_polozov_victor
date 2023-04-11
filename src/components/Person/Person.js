@@ -2,18 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { withTMDBService } from '../hocHelpers/withTMDBService';
+import { Spinner } from '../Spinner';
 
 import styles from './styles.module.css';
 
 const Person = ({ tmdbService }) => {
   const [itemPerson, setItemPerson] = useState();
+  const [loading, setLoading] = useState(true)
   const params = useParams()
 
   useEffect(() => {
     tmdbService.getPerson(params.id).then(data => {
-      setItemPerson(data)
+      setTimeout(() => {
+        setItemPerson(data)
+        setLoading(false)
+      }, 600)
     })
   }, [tmdbService, params]);
+
+  if(loading) return <Spinner />
 
   if (!itemPerson) return;
 
@@ -28,7 +35,7 @@ const Person = ({ tmdbService }) => {
     also_known_as,
     gender,
   } = itemPerson;
-
+  
   return (
     <div className={styles.person_container}>
       <div className={styles.picture_wrapper}>
