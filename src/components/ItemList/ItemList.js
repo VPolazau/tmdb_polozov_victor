@@ -7,12 +7,12 @@ import Stack from '@mui/material/Stack';
 
 import { ToggleBtns } from '../ToogleBtns';
 import { Item } from '../Item';
-import { updateListObj } from '../../actions';
+import { updateListObj, updateType } from '../../actions';
 import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
 
-const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbService }) => {
+const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbService, updateType }) => {
   const [response, setResponse] = useState(listObj);
   const [filterFilms, setfilterFilms] = useState(filter);
   const navigate = useNavigate();
@@ -27,6 +27,9 @@ const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbServic
   }, [listObj]);
 
   useEffect(() => {
+    if (type !== param?.films || param?.people) {
+      updateType(param?.films || param?.people);
+    }
     if (type === 'films' && searchText.length > 0) {
       tmdbService.searchItem('movie', searchText, pageNum).then((data) => {
         updateListObj(data);
@@ -49,7 +52,7 @@ const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbServic
     }
 
     setfilterFilms(filter);
-  }, [filter, pageNum, searchText, type]);
+  }, [filter, pageNum, searchText, type, param]);
 
   const handleChangePagination = (event, value) => {
     window.scrollTo(0, 0);
@@ -92,7 +95,7 @@ const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbServic
 
 const mapStateToProps = ({ listObj, page, filter, type, searchText }) => ({ listObj, page, filter, type, searchText });
 
-const mapDispatchToProps = { updateListObj };
+const mapDispatchToProps = { updateListObj, updateType };
 
 const wrapped = withTMDBService()(connect(mapStateToProps, mapDispatchToProps)(ItemList));
 
