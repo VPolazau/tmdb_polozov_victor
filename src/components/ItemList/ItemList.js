@@ -73,6 +73,7 @@ const ItemList = ({ filter, listObj, type, searchText, updateListObj, tmdbServic
             </div>
           )}
         </div>
+        {results.length === 0 && <div className={styles.void}>Not found</div>}
         <div className={styles.films_list_container}>
           {results.map((item) => (
             <Item key={item.id} item={item} />
