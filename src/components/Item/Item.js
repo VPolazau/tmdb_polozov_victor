@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
@@ -7,6 +10,8 @@ import styles from './styles.module.css';
 import no_image from './no_image.svg';
 
 const Item = ({ item }) => {
+  const type = useSelector(state => state.type)
+
   let { vote_average, title, release_date, poster_path, name, profile_path } = item;
 
   if(vote_average === 0) vote_average = undefined
@@ -14,7 +19,7 @@ const Item = ({ item }) => {
     <div className={styles.card}>
       <div className={styles.image}>
         <div className={styles.wrapper}>
-          <a className={styles.link_img} href='#top'>
+          <Link to={type === 'films' ? `/film/${item.id}` : `/person/${item.id}`} className={styles.link_img}>
             <img
               loading='lazy'
               className={styles.poster}
@@ -32,7 +37,7 @@ const Item = ({ item }) => {
               }
               alt={title || name || undefined}
             />
-          </a>
+          </Link>
         </div>
       </div>
       <div className={styles.content}>
@@ -46,14 +51,15 @@ const Item = ({ item }) => {
           </Box>
         )}
         <h2 className={styles.content_title}>
-          <a href='#flor' title={title || name}>
+          <Link to={type === 'films' ? `/film/${item.id}` : `/person/${item.id}`} title={title || name}>
             {title || name || undefined}
-          </a>
+          </Link>
         </h2>
         {release_date && <p className={styles.content_date}>{release_date.split('-').reverse().join('/')}</p>}
       </div>
     </div>
   );
 };
+
 
 export { Item };
