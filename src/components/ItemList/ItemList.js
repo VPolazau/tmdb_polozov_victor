@@ -16,7 +16,6 @@ import styles from './styles.module.css';
 const ItemList = ({
   filter,
   listObj,
-  type,
   searchText,
   updateListObj,
   tmdbService,
@@ -29,6 +28,8 @@ const ItemList = ({
 
   const params = useParams();
   const pageNum = +params.page;
+
+  const type = params?.films || params?.people
 
   const { results, total_pages } = response;
 
@@ -49,12 +50,12 @@ const ItemList = ({
   useEffect(() => {
     if (type === 'films' && searchText.length > 0) {
       tmdbService.searchItem('movie', searchText, pageNum).then((data) => {
-          updateListObj(data);
+        updateListObj(data);
       });
     }
     if (type === 'people' && searchText.length > 0) {
       tmdbService.searchItem('person', searchText, pageNum).then((data) => {
-          updateListObj(data);
+        updateListObj(data);
       });
     }
     if (type === 'films' && searchText === '') {
@@ -64,10 +65,9 @@ const ItemList = ({
     }
     if (type === 'people' && searchText === '') {
       tmdbService.getPeople(pageNum).then((data) => {
-          updateListObj(data);
+        updateListObj(data);
       });
     }
-
     setfilterFilms(filter);
   }, [filter, type, tmdbService, updateListObj, pageNum, searchText, params]);
 

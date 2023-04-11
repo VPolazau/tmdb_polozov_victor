@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -10,12 +10,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { withTMDBService } from '../hocHelpers/withTMDBService';
 import { updateListObj, updateFilter, updateType, updateSearchText } from '../../actions';
 
-const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter, updateSearchText }) => {
+const PositionedMenu = ({ tmdbService, updateType, updateFilter, updateSearchText }) => {
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
+  const searchText = useSelector(state => state.searchText)
+
   const handleClick = (event) => {
+    updateSearchText('')
+    document.querySelector('#outlined-basic').value = null
     setAnchorEl(event.currentTarget);
   };
 
@@ -26,16 +30,14 @@ const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter, 
     if (e.target.innerText === 'People') {
       tmdbService.getPeople(1).then((data) => {
         updateType('people')
-        updateListObj(data);
         navigate(`/people/page/1`)
       });
     }
     if (e.target.innerText === 'Films') {
       tmdbService.getFilms('popular', 1).then((data) => {
         updateType('films')
-        updateListObj(data);
         updateFilter('popular')
-        navigate(`/films/page/1`)
+        navigate(`/`)
       });
     }
   };
@@ -66,8 +68,8 @@ const PositionedMenu = ({ tmdbService, updateListObj, updateType, updateFilter, 
           horizontal: 'left',
         }}
       >
-        <MenuItem onClick={handleClose}>Films</MenuItem>
-        <MenuItem onClick={handleClose}>People</MenuItem>
+        <MenuItem onClick={handleClose} disabled={searchText.length > 0}>Films</MenuItem>
+        <MenuItem onClick={handleClose} disabled={searchText.length > 0}>People</MenuItem>
       </Menu>
     </div>
   );
