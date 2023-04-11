@@ -15,6 +15,7 @@ const Item = ({ item }) => {
   let { vote_average, title, release_date, poster_path, name, profile_path } = item;
 
   if(vote_average === 0) vote_average = undefined
+
   return (
     <div className={styles.card}>
       <div className={styles.image}>
