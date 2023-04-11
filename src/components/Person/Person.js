@@ -67,7 +67,7 @@ const Person = ({ tmdbService }) => {
             </div>
             <div className={styles.info_elem}>
               <h4 className={styles.info_elem_tag}>Birthday:</h4>
-              <span className={styles.info_elem_body}>{birthday.split('-').reverse().join('/')}</span>
+              <span className={styles.info_elem_body}>{birthday?.split('-').reverse().join('/')}</span>
             </div>
             <div className={styles.info_elem}>
               <h4 className={styles.info_elem_tag}>Place of birth:</h4>
@@ -76,7 +76,7 @@ const Person = ({ tmdbService }) => {
             {deathday && (
               <div className={styles.info_elem}>
                 <h4 className={styles.info_elem_tag}>Deathday:</h4>
-                <span className={styles.info_elem_body}>{deathday.split('-').reverse().join('/')}</span>
+                <span className={styles.info_elem_body}>{deathday?.split('-').reverse().join('/')}</span>
               </div>
             )}
             <div className={styles.info_elem}>
