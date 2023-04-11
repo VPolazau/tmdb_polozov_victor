@@ -2,7 +2,6 @@ const initialState = {
   type: 'films',
   filter: 'popular',
   listObj: {},
-  item: {},
   searchText: '',
 };
 

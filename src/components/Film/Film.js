@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux'
+import { useParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
-import styles from './styles.module.css';
 import { withTMDBService } from '../hocHelpers/withTMDBService';
-import { useParams } from 'react-router-dom';
+
+import styles from './styles.module.css';
 
 const Film = ({ tmdbService }) => {
   const [itemFilm, setItemFilm] = useState()

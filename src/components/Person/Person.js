@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
 import { withTMDBService } from '../hocHelpers/withTMDBService';
 
 import styles from './styles.module.css';
