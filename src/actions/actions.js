@@ -26,4 +26,10 @@ const updateSearchText = (text) => {
   };
 };
 
-export { updateListObj, updateFilter, updateType, updateSearchText };
+const loadingOn = () => {
+  return {
+    type: 'LOADING_ON'
+  }
+}
+
+export { updateListObj, updateFilter, updateType, updateSearchText, loadingOn };
