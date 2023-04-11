@@ -3,7 +3,6 @@ const initialState = {
   filter: 'popular',
   listObj: {},
   searchText: '',
-  isLoading: true,
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,11 +27,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         searchText: action.payload,
-      };
-    case 'LOADING_ON':
-      return {
-        ...state,
-        isLoading: true,
       };
     default:
       return state;

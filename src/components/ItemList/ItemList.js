@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 
 import { ToggleBtns } from '../ToogleBtns';
 import { Item } from '../Item';
-import { updateListObj, updateType, loadingOn } from '../../actions';
+import { updateListObj, updateType } from '../../actions';
 import { withTMDBService } from '../hocHelpers/withTMDBService';
 import { Spinner } from '../Spinner';
 
@@ -21,12 +21,11 @@ const ItemList = ({
   updateListObj,
   tmdbService,
   updateType,
-  isLoading,
-  loadingOn,
 }) => {
   const [response, setResponse] = useState(listObj);
   const [filterFilms, setfilterFilms] = useState(filter);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true)
 
   const params = useParams();
   const pageNum = +params.page;
@@ -34,8 +33,12 @@ const ItemList = ({
   const { results, total_pages } = response;
 
   useEffect(() => {
-    setResponse(listObj);
-  }, [listObj])
+    setLoading(true)
+    setTimeout(() => {
+      setResponse(listObj);
+      setLoading(false)
+    }, 400);
+  }, [listObj]);
 
   useEffect(() => {
     if (type !== params?.films || params?.people) {
@@ -44,37 +47,29 @@ const ItemList = ({
   }, [params, updateType, type]);
 
   useEffect(() => {
-    loadingOn();
     if (type === 'films' && searchText.length > 0) {
       tmdbService.searchItem('movie', searchText, pageNum).then((data) => {
-        setTimeout(() => {
-          updateListObj(data)
-        }, 600)
+          updateListObj(data);
       });
     }
     if (type === 'people' && searchText.length > 0) {
       tmdbService.searchItem('person', searchText, pageNum).then((data) => {
-        setTimeout(() => {
-          updateListObj(data)
-        }, 600)
+          updateListObj(data);
       });
     }
     if (type === 'films' && searchText === '') {
       tmdbService.getFilms(filter, pageNum).then((data) => {
-        setTimeout(() => {
-          updateListObj(data)
-        }, 600)
+        updateListObj(data);
       });
     }
     if (type === 'people' && searchText === '') {
       tmdbService.getPeople(pageNum).then((data) => {
-        setTimeout(() => {
-          updateListObj(data)
-        }, 600)
+          updateListObj(data);
       });
     }
+
     setfilterFilms(filter);
-  }, [filter, type, tmdbService, updateListObj, loadingOn, pageNum, searchText]);
+  }, [filter, type, tmdbService, updateListObj, pageNum, searchText, params]);
 
   const handleChangePagination = (event, value) => {
     window.scrollTo(0, 0);
@@ -83,7 +78,7 @@ const ItemList = ({
 
   if (!results) return;
 
-  if (isLoading) return <Spinner />;
+  if (loading) return <Spinner />;
 
   return (
     <>
@@ -120,16 +115,15 @@ const ItemList = ({
   );
 };
 
-const mapStateToProps = ({ listObj, page, filter, type, searchText, isLoading }) => ({
+const mapStateToProps = ({ listObj, page, filter, type, searchText }) => ({
   listObj,
   page,
   filter,
   type,
   searchText,
-  isLoading,
 });
 
-const mapDispatchToProps = { updateListObj, updateType, loadingOn };
+const mapDispatchToProps = { updateListObj, updateType };
 
 const wrapped = withTMDBService()(connect(mapStateToProps, mapDispatchToProps)(ItemList));
 
