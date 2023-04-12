@@ -24,7 +24,7 @@ const Header = ({ type, updateSearchText }) => {
       navigate('films/page/1')
     }
     if (type === 'people') {
-      navigate('films/people/1')
+      navigate('people/page/1')
     }
   }, [debouncedText]);
 
