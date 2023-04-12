@@ -34,6 +34,7 @@ const ItemList = ({
   const { results, total_pages } = response;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(true)
     setTimeout(() => {
       setResponse(listObj);
@@ -72,7 +73,6 @@ const ItemList = ({
   }, [filter, type, tmdbService, updateListObj, pageNum, searchText, params]);
 
   const handleChangePagination = (event, value) => {
-    window.scrollTo(0, 0);
     navigate(`/${type}/page/${value}`);
   };
 
