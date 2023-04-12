@@ -6,19 +6,27 @@ import TextField from '@mui/material/TextField';
 import { PositionedMenu } from '../PositionedMenu';
 import logo from './logo.svg';
 import { withTMDBService } from '../hocHelpers/withTMDBService';
-import { updateListObj, updateFilter, updateSearchText } from '../../actions';
+import { updateSearchText } from '../../actions';
 
 import styles from './styles.module.css';
 import { useDebounce } from '../hooks/useDebounce';
+import { useNavigate } from 'react-router-dom';
 
-const Header = ({ type, tmdbService, updateListObj, updateFilter, updateSearchText }) => {
+const Header = ({ type, updateSearchText }) => {
   const [text, setText] = useState('');
+  const navigate = useNavigate()
 
   const debouncedText = useDebounce(text, 500);
 
   useEffect(() => {
     updateSearchText(debouncedText);
-  }, [debouncedText, updateSearchText]);
+    if (type === 'films') {
+      navigate('films/page/1')
+    }
+    if (type === 'people') {
+      navigate('films/people/1')
+    }
+  }, [debouncedText]);
 
   const handleSearchChange = (e) => setText(e.target.value);
 
@@ -44,7 +52,7 @@ const Header = ({ type, tmdbService, updateListObj, updateFilter, updateSearchTe
 
 const mapStateToProps = ({ type }) => ({ type });
 
-const mapDispatchToProps = { updateListObj, updateFilter, updateSearchText };
+const mapDispatchToProps = { updateSearchText };
 
 const wrapped = withTMDBService()(connect(mapStateToProps, mapDispatchToProps)(Header));
 

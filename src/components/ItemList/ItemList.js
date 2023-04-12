@@ -70,7 +70,7 @@ const ItemList = ({
       });
     }
     setfilterFilms(filter);
-  }, [filter, type, tmdbService, updateListObj, pageNum, searchText, params]);
+  }, [filter, type, pageNum, params]);
 
   const handleChangePagination = (event, value) => {
     navigate(`/${type}/page/${value}`);
